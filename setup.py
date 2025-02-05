@@ -244,6 +244,53 @@ def main() -> None:
                           });
                         });
                     """)
+                },
+                "components": {
+                    "ChatForm.js": textwrap.dedent("""\
+                        import React from 'react';
+                        
+                        const ChatForm = ({ onSubmit }) => {
+                          const handleSubmit = (e) => {
+                            e.preventDefault();
+                            const question = e.target.elements.question.value;
+                            onSubmit(question);
+                          };
+                        
+                          return (
+                            <form onSubmit={handleSubmit}>
+                              <input type="text" name="question" placeholder="Enter your question" />
+                              <button type="submit">Send</button>
+                            </form>
+                          );
+                        };
+                        
+                        export default ChatForm;
+                    """)
+                },
+                "pages": {
+                    "Home.js": textwrap.dedent("""\
+                        import React from 'react';
+                        
+                        const Home = () => {
+                          return (
+                            <div>
+                              <h2>Welcome to the AWS Tutor</h2>
+                              <p>This is the home page.</p>
+                            </div>
+                          );
+                        };
+                        
+                        export default Home;
+                    """)
+                },
+                "styles": {
+                    "App.css": textwrap.dedent("""\
+                        /* App.css placeholder */
+                        body {
+                          margin: 0;
+                          font-family: Arial, sans-serif;
+                        }
+                    """)
                 }
             }
         },
