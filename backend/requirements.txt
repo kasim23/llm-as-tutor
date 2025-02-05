@@ -1,0 +1,9 @@
+# Python dependencies for the backend
+fastapi
+uvicorn
+langchain
+openai
+pytest
+pytest-cov
+pytest-asyncio
+httpx

@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aws-tutor-backend-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: aws-tutor-backend
+  template:
+    metadata:
+      labels:
+        app: aws-tutor-backend
+    spec:
+      containers:
+      - name: aws-tutor-backend
+        image: <your-ecr-repo>/aws-tutor-backend:latest
+        ports:
+        - containerPort: 8000
