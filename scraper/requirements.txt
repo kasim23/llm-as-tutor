@@ -1,0 +1,6 @@
+scrapy==2.8.0
+beautifulsoup4==4.12.2
+requests==2.31.0
+openai==0.27.7
+weaviate-client==3.17.2
+python-dotenv==1.0.0
