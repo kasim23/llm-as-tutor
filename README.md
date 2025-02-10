@@ -34,3 +34,45 @@ I'll use:
   - For this guide, we'll cover both Docker for local development and AWS RDS for production deployment.
 
 
+
+**Understanding the `docker-compose.yml` Components**
+- Here's a breakdown of each service defined in the docker-compose.yml:
+backend:
+    - Purpose: Runs your FastAPI backend server.
+    - Build Context: Located in the ./backend directory.
+    - Ports: Exposes port 8000 for API access.
+    - Environment Variables: Loads from backend/.env.
+    - Dependencies: Waits for postgres and weaviate services to be up.
+ingestion:
+    - Purpose: Handles data ingestion processes.
+    - Build Context: Located in the ./ingestion directory.
+    - Environment Variables: Shares environment variables from backend/.env.
+    - Dependencies: Depends on postgres and weaviate.
+scraper:
+    - Purpose: Executes the Scrapy spider to crawl AWS documentation.
+    - Build Context: Located in the ./scraper directory.
+    - Command: Runs the Scrapy spider named aws_docs.
+    - Environment Variables: Shares environment variables from backend/.env.
+    - Dependencies: Depends on weaviate.
+postgres:
+    - Purpose: Hosts the PostgreSQL database.
+    - Image: Uses PostgreSQL version 13.
+    - Environment Variables: Sets up the database user, password, and name.
+    - Ports: Exposes port 5432 for database access.
+Volumes: Persists data using the postgres-data volume.
+weaviate:
+    - Purpose: Hosts the Weaviate vector database.
+    - Image: Uses the latest Weaviate image.
+    - Ports: Exposes port 8080 for API access.
+    - Environment Variables: Configures Weaviate settings, including enabling the text2vec-transformers module for vectorization.
+    - Volumes: Persists data using the weaviate-storage volume.
+    - Healthcheck: Checks if Weaviate is ready by pinging the /v1/.well-known/ready endpoint.
+schema-init:
+    - Purpose: Applies the Weaviate schema after Weaviate is up and running.
+    - Image: Uses the latest curl image.
+    - Dependencies: Waits until the weaviate service is healthy.
+    - Volumes: Mounts the weaviate-schema.json file into the container.
+    - Entrypoint: A shell command that waits for Weaviate to be ready and then applies the schema using curl.
+volumes:
+    - postgres-data: Persists PostgreSQL data.
+    - weaviate-storage: Persists Weaviate data.
